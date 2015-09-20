@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Start:</strong>
+  <%= @time_entry.start %>
+</p>
+
+<p>
+  <strong>End:</strong>
+  <%= @time_entry.end %>
+</p>
+
+<p>
+  <strong>Rate:</strong>
+  <%= @time_entry.rate %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @time_entry.description %>
+</p>
+
+<p>
+  <strong>Tags:</strong>
+  <%= @time_entry.tags %>
+</p>
+
+<p>
+  <strong>Invoice:</strong>
+  <%= @time_entry.invoice_id %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @time_entry.user_id %>
+</p>
+
+<%= link_to 'Edit', edit_time_entry_path(@time_entry) %> |
+<%= link_to 'Back', time_entries_path %>

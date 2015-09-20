@@ -1,0 +1,39 @@
+<h1>Listing invoices</h1>
+
+<table class='tablesorter'>
+  <thead>
+    <tr>
+      <th data-placeholder='(YYYY-MM-DD HH:MM:SS TZ)'>Date</th>
+      <th data-placeholder='(String)'>Invoice ID</th>
+      <th data-placeholder='(Integer)'>Company ID</th>
+      <th data-placeholder='(YYYY-MM-DD HH:MM:SS TZ)'>Start</th>
+      <th data-placeholder='(YYYY-MM-DD HH:MM:SS TZ)'>End</th>
+      <th data-placeholder='(Decimal 10,2)'>Total</th>
+      <% if current_user.admin? %>
+        <th colspan="3" class='filter-false'></th>
+      <% end %>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @invoices.each do |invoice| %>
+      <tr>
+        <td><%= invoice.created_at %></td>
+        <td><%= invoice.qb_name %></td>
+        <td><%= invoice.company_id %></td>
+        <td><%= invoice.start %></td>
+        <td><%= invoice.end %></td>
+        <td><%= number_to_currency invoice.total %></td>
+        <% if current_user.admin? %>
+          <td><%= link_to 'Show', invoice %></td>
+          <td><%= link_to 'Edit', edit_invoice_path(invoice) %></td>
+          <td><%= link_to 'Destroy', invoice, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Invoice', new_invoice_path if current_user.admin?%>

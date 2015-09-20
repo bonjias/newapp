@@ -1,0 +1,53 @@
+<p id="notice"><%= notice %></p>
+
+<h2><%= @invoice.qb_name %> - <%= @entries[0].name %></h2>
+
+<p>
+  <strong>Total:</strong> <%= number_to_currency @invoice.total %>
+</p>
+
+<p>
+  <strong>Date:</strong> <%= @invoice.created_at %>
+</p>
+
+<p>
+  <strong>Time Start:</strong> <%= @invoice.start %>
+</p>
+
+<p>
+  <strong>Time End:</strong> <%= @invoice.end %>
+</p>
+
+<hr>
+
+<h3>Line Items:</h3>
+
+<table class='tablesorter'>
+  <thead>
+    <tr>
+      <th>Start</th>
+      <th>End</th>
+      <th>Description</th>
+      <th>Time (h)</th>
+      <th>Rate</th>
+      <th>Fees</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @entries.each do |entry| %>
+    <tr>
+      <%  hours = (entry.end - entry.start) / 3600 %>
+      <td><%= entry.start %></td>
+      <td><%= entry.end %></td>
+      <td><%= entry.description %></td>
+      <td><%= hours %></td>
+      <td><%= entry.rate %></td>
+      <td><%= hours * entry.rate %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+    
+
+<%= link_to 'Edit', edit_invoice_path(@invoice) %> |
+<%= link_to 'Back', invoices_path %>

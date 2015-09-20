@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>LasLabs - <%= params[:controller].titleize %></title>
+    <!-- @todo - defer loading -->
+    <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+    
+    <%= stylesheet_link_tag "//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" %>
+    <%= stylesheet_link_tag '//cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.17.4/css/theme.bootstrap.css' %>
+ 
+    <%= stylesheet_link_tag 'application', media: "all", "data-turbolinks-track" => true %>
+    
+    <%= csrf_meta_tags %>
+    <%= favicon_link_tag '/assets/favicon.png', type: 'image/png' %>
+  </head>
+  <body>
+           
+    <% if flash[:error] %>
+      <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert">
+          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+        </button>
+        <strong>Error:</strong> <%= flash[:error] %>
+      </div>
+    <% end %>
+    
+    <% if flash[:success] %>
+      <div class="alert alert-success alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert">
+          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+        </button>
+        <%= flash[:success] %>
+      </div>
+    <% end %>
+  
+    <% if current_user %>
+      
+      <!-- NAV  -->
+      
+      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle Nav</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <%= link_to "LasLabs", "https://laslabs.com", class:"navbar-brand" %>
+          </div><!-- navbar-collapse -->
+          
+          <div class="navbar-collapse collapse">
+            
+            <ul class="nav navbar-nav navbar-left">
+              
+              <% ['invoices', 'time_entries'].each do |el| %>
+                <li class="<%= 'active' if params[:controller] == el %>">
+                  <%= link_to el.titleize, send("#{el}_url") %>
+                </li>
+              <% end %>
+
+            </ul>
+            
+            <p class="navbar-text navbar-right">
+              Logged in as <strong><%= current_user.name %></strong> -
+              <%= link_to "Sign out", signout_path, id: "sign_out" %>
+            </p>
+          </div> <!-- navbar header -->
+          
+        </div> <!-- container-fluid -->
+      </div> <!-- navbar -->
+      
+      <!-- /NAV -->
+      
+      <div class='container-fluid'>
+        <% require "pp" %>
+        <% pp current_user %>
+        <%= yield %>
+      </div>
+      
+    <% else %> <!-- 401 -->
+      
+      <% if flash[:error] %>
+        <div class="alert alert-danger alert-dismissible" role="alert">
+          <button type="button" class="close" data-dismiss="alert">
+            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+          </button>
+          <strong>Error:</strong> <%= flash[:error] %>
+        </div>
+      <% end %>
+      
+      <div class='container-fluid'>
+        <div class='jumbotron'>
+          <h1>Restricted Access</h1>
+          <%= link_to "Sign in with Google", "/auth/google_oauth2", id: "sign_in", class: "btn btn-primary" %>
+        </div>
+      </div> <!-- container-fluid -->
+      
+    <% end %>
+
+    <div class="footer">
+      <div class="container">
+        <p class="text-muted">&copy; LasLabs.com</p>
+      </div>
+    </div>
+
+    <%= javascript_include_tag '//cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.17.4/js/jquery.tablesorter.min.js' %>
+    <%= javascript_include_tag '//cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.17.4/js/jquery.tablesorter.widgets.min.js' %>
+
+    <%= javascript_include_tag '//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js' %>
+    
+    <%= javascript_include_tag "https://appcenter.intuit.com/Content/IA/intuit.ipp.anywhere.js" %>
+    <%= javascript_tag do %>
+      intuit.ipp.anywhere.setup({menuProxy: '/path/to/blue-dot', grantUrl: '<%= qbo_authenticate_url %>'});
+    <% end %>
+    
+  </body>
+</html>

@@ -1,0 +1,27 @@
+<h1>Listing authorized_users</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Email</th>
+      <th>Company</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @authorized_users.each do |authorized_user| %>
+      <tr>
+        <td><%= authorized_user.email %></td>
+        <td><%= authorized_user.company %></td>
+        <td><%= link_to 'Show', authorized_user %></td>
+        <td><%= link_to 'Edit', edit_authorized_user_path(authorized_user) %></td>
+        <td><%= link_to 'Destroy', authorized_user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Authorized user', new_authorized_user_path %>

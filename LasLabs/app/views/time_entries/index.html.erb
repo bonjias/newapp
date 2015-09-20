@@ -1,0 +1,64 @@
+<h1>
+  Unbilled Time Entries -
+  
+  <% if not current_user.enc_qbo_secret %>
+    <ipp:connectToIntuit></ipp:connectToIntuit>
+  <% else %>
+    <a type='button' class='btn btn-primary' id='new_invoice' href='<%= qbo_new_invoice_url %>'>
+      Generate Invoice
+    </a>
+  <% end %>
+</h1>
+
+<table class='tablesorter'>
+  <thead>
+    <tr>
+      <th data-placeholder='(YYYY-MM-DD HH:MM:SS TZ)'>Start</th>
+      <th data-placeholder='(YYYY-MM-DD HH:MM:SS TZ)'>End</th>
+      <th data-placeholder='(String)'>Description</th>
+      <th data-placeholder='(Comma Delimited String)'>Tags</th>
+      <th data-placeholder='(Decimal 7,2)'>Hours</th>
+      <th data-placeholder='(Decimal 7,2)'>Rate</th>
+      <th data-placeholder='(Decimal 10,2)'>Fees</th>
+      <% if current_user.admin? %>
+        <th colspan='3' class='filter-false'></th>
+      <% end %>
+    </tr>
+  </thead>
+  
+  <% hours, fees, rate = 0, 0, 0 %>
+  
+  <tbody id='time_entries'>
+    <% @time_entry.each do |time_entry| %>
+      <%  hours_ = (time_entry.end - time_entry.start) / 3600
+          hours += hours_
+          fees += (hours_ * time_entry.rate)
+      %>
+      <tr>
+        <td><%= time_entry.start %></td>
+        <td><%= time_entry.end %></td>
+        <td><%= time_entry.description %></td>
+        <td><%= time_entry.tags %></td>
+        <td><%= sprintf '%.02f', hours_ %></td>
+        <td><%= number_to_currency time_entry.rate %></td>
+        <td><%= number_to_currency (hours_ * time_entry.rate) %></td>
+        <% if current_user.admin? %>
+          <td><%= link_to 'Show', time_entry %></td>
+          <td><%= link_to 'Edit', edit_time_entry_path(time_entry) %></td>
+          <td><%= link_to 'Destroy', time_entry, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% end %>
+      </tr>
+    <% end %>
+    <!-- Totals -->
+    <tr>
+      <td colspan='4' class='text-right'></td>
+      <% [hours, rate, fees].each do |el| %>
+        <td data-number='<%= el %>'><strong><%= el %></strong></td>
+      <% end %>
+    </tr>
+  </tbody>
+</table>
+<br />
+<%= link_to 'New Time entry', new_time_entry_path if current_user.admin? %>
+<br />
+<button type="button" class="btn btn-default hidden" id='get_toggl' data-url='<%= get_toggl_path %>'>Get From Toggl</button>
