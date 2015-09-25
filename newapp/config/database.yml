@@ -17,7 +17,7 @@
 development:
   adapter: postgresql
   encoding: unicode
-  database: flixter_development
+  database: newapp_development
   pool: 5
   username: postgres
   password: password
@@ -47,7 +47,7 @@ development:
 test:
   adapter: postgresql
   encoding: unicode
-  database: flixter_test
+  database: newapp_test
   pool: 5
   username: postgres
   password: password
@@ -56,7 +56,7 @@ test:
 production:
   adapter: postgresql
   encoding: unicode
-  database: flixter_production
+  database: newapp_production
   pool: 5
   username: postgres
   password: password
